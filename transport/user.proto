@@ -1,0 +1,7 @@
+syntax = "proto3";
+package Transport;
+
+message User {
+        string id = 1;
+        string name = 2;
+}
