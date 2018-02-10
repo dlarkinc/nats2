@@ -1,0 +1,43 @@
+version: "2"
+
+services:
+  nats:
+    image: 'nats:0.8.0'
+    entrypoint: "/gnatsd -DV"
+    expose:
+      - "4222"
+    ports:
+      - "8222:8222"
+    hostname: nats-server
+  user-service:
+    build:
+      context: "./userservice"
+    entrypoint: /go/user-service
+    links:
+      - nats
+    environment:
+      - "NATS_URI=nats://nats:4222"
+    depends_on:
+      - nats
+  time-service:
+    build:
+      context: "./timeservice"
+    entrypoint: /go/time-service
+    links:
+      - nats
+    environment:
+      - "NATS_URI=nats://nats:4222"
+    depends_on:
+      - nats
+  frontend:
+    build:
+      context: "./frontend"
+    entrypoint: /go/frontend
+    links:
+      - nats
+    environment:
+      - "NATS_URI=nats://nats:4222"
+    depends_on:
+      - nats
+    ports:
+      - "3000:3000"

@@ -14,18 +14,17 @@ var nc *nats.Conn
 
 func main() {
 
-    if len(os.Args) != 2 {
-        fmt.Println("Wrong number of arguments. Need NATS server address.")
-        return
-    }
+    uri := os.Getenv("NATS_URI")
+
     var err error
 
-    nc, err = nats.Connect(os.Args[1])
+    nc, err = nats.Connect(uri)
     if err != nil {
         fmt.Println(err)
+        return
     }
 
-    fmt.Println("Connected to NATS server " + os.Args[1])
+    fmt.Println("Connected to NATS server " + uri)
 
     users = make(map[string]string)
     users["1"] = "Bob"
