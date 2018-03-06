@@ -1,5 +1,7 @@
 FROM golang:1.9
 
+MAINTAINER larkin.cunningham
+
 WORKDIR /go
 COPY . .
 
